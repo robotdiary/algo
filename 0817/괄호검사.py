@@ -19,19 +19,9 @@ def pull():
 T= int(input())
 for tc in range(1, T+1):
     check = input()
-    # left = check.count('(')
-    # right = check.count(')')
-    # if left == right:
-    #     print(f'#{tc} 1')
-    # else:
-    #     print(f'#{tc} -1')
-
-    # 스택으로
-    size = len(check)
-    stack = [0] * size
-    top = -1
-    for i in check:
-        if i in ['(', '{', '[']:
-            push(i)
-        elif i in [')', '}', ']']:
-            pull()
+    left = check.count('(')
+    right = check.count(')')
+    if left == right:
+        print(f'#{tc} 1')
+    else:
+        print(f'#{tc} -1')
