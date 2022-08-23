@@ -17,14 +17,14 @@ for i in range(e): # 간선 개수만큼 0, 1, 2, 3, 4, 5, 6, 7
 #             stack.append(destination)
 
 # [3] 재귀
-def dfs(n):
-    if n not in visited:  # 우선 visited 없으면 넣어줌
-        visited.append(n)
-
-    for destination in range(v+1):
-        if arr[n][destination] and destination not in visited:
-            dfs(destination)  # 다음 재귀 깊이로 이동
-visited = []
-dfs(1)
+# def dfs(n):
+#     if n not in visited:  # 우선 visited 없으면 넣어줌
+#         visited.append(n)
+#
+#     for destination in range(v+1):
+#         if arr[n][destination] and destination not in visited:
+#             dfs(destination)  # 다음 재귀 깊이로 이동
+# visited = []
+# dfs(1)
 print(*visited)
 
