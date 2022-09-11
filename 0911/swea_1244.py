@@ -1,54 +1,104 @@
 # 1244. [S/W 문제해결 응용] 2일차 - 최대 상금 D3
 def dfs(l, c, n): # 3, 1
     global answer
+# [0] 교환 횟수를 다 썼으면 리턴
     if c == 0:
-        result = ''
+        result = '' # 숫자 비교하기 위해 문자열로 변환
         for z in n:
             result += z
             if result > answer:
                 answer = result
         return
-    elif answer == sort_n:
-
+# [1] 모든 경우의 수만큼 자리 교환
     for i in range(l-1): # 0, 1
         for j in range(i+1, l): # 1, 2 / 2
-            if answer[i] > n[j]:
+            if n[j] < answer[i]:
                 continue
             else:
                 n[i], n[j] = n[j], n[i]
-                if n[i] < answer[i]:
-                    continue
+                # 최대 수가 되면 리턴
+                if n == sort_n and not check and (c-1) % 2:
+                    n[-1], n[-2] = n[-2], n[-1]
+                    result = ''
+                    for z in n:
+                        result += z
+                        if result > answer:
+                            answer = result
+                    return
+                elif n == sort_n:
+                    result = ''
+                    for z in n:
+                        result += z
+                        if result > answer:
+                            answer = result
+                    return
                 else:
                     dfs(l, c-1, n)
-                    if answer == sort_n and (c-1) % 2:
-                        n[-1], n[-2] = n[-2], n[-1]
-                        result = ''
-                        for z in n:
-                            result += z
-                            answer = result
-                        return
-                    elif answer == sort_n:
-                        result = ''
-                        for z in n:
-                            result += z
-                            answer = result
-                        return
-                    n[i], n[j] = n[j], n[i]
+                n[i], n[j] = n[j], n[i]
 
 
 T = int(input())
 for tc in range(1, T + 1):
-    num, cnt = input().split() # '123', '1'
-    n = list(num) # ['1', '2', '3']
+    num, cnt = input().split()  # '123', '1'
+    n = list(num)  # ['1', '2', '3']
     sort_n = sorted(n, reverse=True)
-    count = int(cnt) # 1
+    count = int(cnt)  # 1
     answer = max(n) + '0'*(len(n)-1)
-    dfs(len(n), count, n) # 3, 1
+    check = 0
+    if len(set(n)) != len(n):
+        check = 1
+    dfs(len(n), count, n)  # 3, 1
     print(f'#{tc} {answer}')
 
-# a = ['1', '2', '3']
-# print(max(a) + '0'*3)
 
+# [2] dfs 백트래킹 대혼돈
+# def dfs(l, c, n): # 3, 1
+#     global answer
+#     if c == 0:
+#         result = ''
+#         for z in n:
+#             result += z
+#             if result > answer:
+#                 answer = result
+#         return
+#
+#     for i in range(l-1): # 0, 1
+#         for j in range(i+1, l): # 1, 2 / 2
+#             if answer[i] > n[j]:
+#                 continue
+#             else:
+#                 n[i], n[j] = n[j], n[i]
+#                 if n[i] < answer[i]:
+#                     continue
+#                 else:
+#                     dfs(l, c-1, n)
+#                     if answer == sort_n and (c-1) % 2:
+#                         n[-1], n[-2] = n[-2], n[-1]
+#                         result = ''
+#                         for z in n:
+#                             result += z
+#                             answer = result
+#                         return
+#                     elif answer == sort_n:
+#                         result = ''
+#                         for z in n:
+#                             result += z
+#                             answer = result
+#                         return
+#                     n[i], n[j] = n[j], n[i]
+#
+#
+# T = int(input())
+# for tc in range(1, T + 1):
+#     num, cnt = input().split() # '123', '1'
+#     n = list(num) # ['1', '2', '3']
+#     sort_n = sorted(n, reverse=True)
+#     count = int(cnt) # 1
+#     answer = max(n) + '0'*(len(n)-1)
+#     dfs(len(n), count, n) # 3, 1
+#     print(f'#{tc} {answer}')
+
+# [1] 삽입정렬 대실패
 # T = int(input())
 # for tc in range(1, T + 1):
 #     num, cnt = input().split() # '123', '1'
