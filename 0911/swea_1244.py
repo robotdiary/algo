@@ -1,55 +1,83 @@
 # 1244. [S/W 문제해결 응용] 2일차 - 최대 상금 D3
-def dfs(l, c, n): # 3, 1
-    global answer
-# [0] 교환 횟수를 다 썼으면 리턴
-    if c == 0:
-        result = '' # 숫자 비교하기 위해 문자열로 변환
-        for z in n:
-            result += z
-            if result > answer:
-                answer = result
-        return
-# [1] 모든 경우의 수만큼 자리 교환
-    for i in range(l-1): # 0, 1
-        for j in range(i+1, l): # 1, 2 / 2
-            if n[j] < answer[i]:
-                continue
-            else:
-                n[i], n[j] = n[j], n[i]
-                # 최대 수가 되면 리턴
-                if n == sort_n and not check and (c-1) % 2:
-                    n[-1], n[-2] = n[-2], n[-1]
-                    result = ''
-                    for z in n:
-                        result += z
-                        if result > answer:
-                            answer = result
-                    return
-                elif n == sort_n:
-                    result = ''
-                    for z in n:
-                        result += z
-                        if result > answer:
-                            answer = result
-                    return
-                else:
-                    dfs(l, c-1, n)
-                n[i], n[j] = n[j], n[i]
+def get_num():
+    number = ''
+    for i in nums:
+        numbers += i
+    numbers = int(numbers)
+    return numbers
+
+def find_max(k):
+    global ans
+    if k == cnt:
+        ans = max(ans, get_num())
+    else:
+        for i in range(N-1):
+            for j in range(i+1, N):
+                nums[i], nums[j] = nums[j], nums[i]
+                find_max(k+1)
+                nums[i], nums[j] = nums[j], nums[i]
 
 
-T = int(input())
-for tc in range(1, T + 1):
-    num, cnt = input().split()  # '123', '1'
-    n = list(num)  # ['1', '2', '3']
-    sort_n = sorted(n, reverse=True)
-    count = int(cnt)  # 1
-    answer = max(n) + '0'*(len(n)-1)
-    check = 0
-    if len(set(n)) != len(n):
-        check = 1
-    dfs(len(n), count, n)  # 3, 1
-    print(f'#{tc} {answer}')
+for tc in range(1, int(input()) + 1):
+    num_str, cnt = input().split()
+    N = len(num_str)
+    nums = list(map(int, num_str))
+    cnt - int(cnt)
+    ans = 0
+    find_max()
 
+
+# [3] 테케 두 개 통과 못 함
+# def dfs(l, c, n): # 3, 1
+#     global answer
+# # [0] 교환 횟수를 다 썼으면 리턴
+#     if c == 0:
+#         result = '' # 숫자 비교하기 위해 문자열로 변환
+#         for z in n:
+#             result += z
+#             if result > answer:
+#                 answer = result
+#         return
+# # [1] 모든 경우의 수만큼 자리 교환
+#     for i in range(l-1): # 0, 1
+#         for j in range(i+1, l): # 1, 2 / 2
+#             if n[j] < answer[i]:
+#                 continue
+#             else:
+#                 n[i], n[j] = n[j], n[i]
+#                 # 최대 수가 되면 리턴
+#                 if n == sort_n and not check and (c-1) % 2:
+#                     n[-1], n[-2] = n[-2], n[-1]
+#                     result = ''
+#                     for z in n:
+#                         result += z
+#                         if result > answer:
+#                             answer = result
+#                     return
+#                 elif n == sort_n:
+#                     result = ''
+#                     for z in n:
+#                         result += z
+#                         if result > answer:
+#                             answer = result
+#                     return
+#                 else:
+#                     dfs(l, c-1, n)
+#                 n[i], n[j] = n[j], n[i]
+
+
+# T = int(input())
+# for tc in range(1, T + 1):
+#     num, cnt = input().split()  # '123', '1'
+#     n = list(num)  # ['1', '2', '3']
+#     sort_n = sorted(n, reverse=True)
+#     count = int(cnt)  # 1
+#     answer = max(n) + '0'*(len(n)-1)
+#     check = 0
+#     if len(set(n)) != len(n):
+#         check = 1
+#     dfs(len(n), count, n)  # 3, 1
+#     print(f'#{tc} {answer}')
 
 # [2] dfs 백트래킹 대혼돈
 # def dfs(l, c, n): # 3, 1
