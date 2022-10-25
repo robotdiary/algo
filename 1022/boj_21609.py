@@ -1,7 +1,8 @@
 # boj 20609 상어중학교 (G2)
 def select():
     global answer
-    selected_block_group = [0, 0, [0]]
+    selected_block_group = [0, 0, [0]]  # 무지개개수, 기준블럭위치, 좌표
+    # [1] 전체를 탐색하면서 가장 큰 영역의 블럭을 기록한다.
     for i in range(n):
         for j in range(n):
             if arr[i][j] > 0:
