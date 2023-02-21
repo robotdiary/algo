@@ -1,22 +1,20 @@
-import sys
-import heapq
+n = int(input())
+acup = []  # 대회 점수
+bcup = []  # 점수 정렬
 
-heap = []
-
-w, n = map(int, input().split())
+final = [0]*n  # 점수 합계
+finalcup = []
+rank = []
 for _ in range(n):
-    weight, price = map(int, input().split())
-    heapq.heappush(heap, (-price, weight))
-answer = 0
-while w and heap:
-    price, weight = heapq.heappop(heap)
-    print('전', weight, price, w)
-    if w >= weight:
-        w -= weight
-        answer += weight * (price * -1)
-    else:
-        answer += w * (price * -1)
-        w = 0
-        break
-    print('후', weight, answer, w)
-print(answer)
+    acup = list(map(int, input().split()))
+    bcup = sorted(acup, reverse=True)
+    ccup = []  # 순위
+    for i in range(n):
+        ccup.append(bcup.index(acup[i]) + 1)
+        final[i] += acup[i]
+    print(*ccup)
+
+finalcup = sorted(final, reverse=True)
+for i in range(n):
+    rank.append(finalcup.index(final[i]) + 1)
+print(*rank)
