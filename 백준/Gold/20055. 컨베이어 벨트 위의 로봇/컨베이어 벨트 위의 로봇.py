@@ -1,16 +1,15 @@
-from collections import deque
 n, k = map(int, input().split())  # 벨트 한 쪽, 0의 수
-a = deque(list(map(int, input().split())))
+a = list(map(int, input().split()))
 
-robots = deque([0] * n)
+robots = [0] * n
 end = n-1  # 로봇 내리는 지점
 cnt = 0  # 0 개수
 answer = 0
 while cnt < k:
     # 벨트와 로봇 한 칸 이동
-    a.appendleft(a.pop())
+    a.insert(0, a.pop())
     robots.pop()
-    robots.appendleft(0)
+    robots.insert(0, 0)
     robots[-1] = 0
 
     # 로봇 이동
