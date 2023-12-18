@@ -1,53 +1,67 @@
 '''
-평범하게 상어를 잡는 작전
+9시 56분 - 10시 48분 : 구현(26분) / 수정(26분)
+new_arr을 봐야할 때, arr을 봐서 틀렸다.
 '''
-from collections import deque
+def find_next(cr, cc, s, d):
+    arr[cr][cc] = 0  # 있던 애 없애
+    gr, gc = cr + (di[d] * s), cc + (dj[d] * s)
+    if d in [0, 1]:  # 상하면
+        n = N + N - 2
+        gr %= n
+        if gr >= N:
+            d = oppo[d]
+        gr = saero[gr]
+    else:  # 좌우면
+        n = M + M - 2
+        gc %= n
+        if gc >= M:
+            d = oppo[d]
+        gc = garo[gc]
+
+    gompangs[gompang] = (gr, gc, s, d)  # 정보 변경
+    return gr, gc
 
 
-def move(x, y, distance, direction):
-    for i in range(distance):
-        nr, nc = x + di[direction], y + dj[direction]
-        if 0 <= nr < n and 0 <= nc < m:
-            x, y = nr, nc
-        else:
-            direction = turn[direction]
-            nr, nc = x + di[direction], y + dj[direction]
-            x, y = nr, nc
-    return x, y, direction
+N, M, K = map(int, input().split())
+arr = [[0] * M for _ in range(N)]
+gompangs = {}
+for _ in range(K):
+    X, Y, S, D, B = map(int, input().split())
+    gompangs[B] = (X-1, Y-1, S, D-1)  # 좌표, 거리, 방향
+    arr[X-1][Y-1] = B
+di = (-1, 1, 0, 0)
+dj = (0, 0, 1, -1)
+oppo = {0: 1, 1: 0, 2: 3, 3: 2}
+garo = [i for i in range(M)] + [i for i in range(M-2, 0, -1)]
+saero = [i for i in range(N)] + [i for i in range(N-2, 0, -1)]
+dead = set()
 
-n, m, k = map(int, input().split())
-sharks = deque()
-for _ in range(k):
-    rr, cc, ss, dd, zz, = tuple(map(int, input().split()))
-    sharks.append((rr - 1, cc - 1, ss, dd, zz))
-answer = set()
-di = (0, -1, 1, 0, 0)
-dj = (0, 0, 0, 1, -1)
-turn = {1: 2, 2: 1, 3: 4, 4: 3}
+answer = 0
+for tc in range(M):
+    # [1] 아래로 먼저 만나는 곰팡이 채취
+    for down in range(N):
+        if arr[down][tc]:
+            answer += arr[down][tc]
+            dead.add(arr[down][tc])
+            arr[down][tc] = 0  # 디버깅용
+            break
+            
+    # [2] 이동
+    new_arr = [[0] * M for _ in range(N)]
+    for gompang in gompangs:
+        if gompang not in dead:
+            nr, nc = find_next(*gompangs[gompang])
 
-for man in range(m):
-    visited = [[0] * m for _ in range(n)]
-    catch = (100, 100, 0)
-    # [1] 가까운 아래 상어 잡기
-    for r, c, s, d, z in sharks:
-        if c == man and r < catch[0]:
-            catch = (r, c, z)
-    answer.add(catch[2])
+            # 먼저 온 애 있으면 죽이고
+            if new_arr[nr][nc]:
+                if new_arr[nr][nc] > gompang:
+                    dead.add(gompang)
 
-    # [2] 상어 이동
-    for d in range(len(sharks)):
-        r, c, s, d, z = sharks.popleft()
-        if z in answer:
-            continue
-        r, c, d = move(r, c, s, d)
-        if visited[r][c] == 0:
-            visited[r][c] = (z, s, d)
-        else:
-            visited[r][c] = max(visited[r][c], (z, s, d))
-
-    # [3] 상어 추가
-    for i in range(n):
-        for j in range(m):
-            if visited[i][j]:
-                sharks.append((i, j, visited[i][j][1], visited[i][j][2], visited[i][j][0]))
-print(sum(answer))
+                else:
+                    dead.add(new_arr[nr][nc])  # 이거?
+                    new_arr[nr][nc] = gompang
+            else:
+                new_arr[nr][nc] = gompang
+    arr = new_arr
+    
+print(answer)
